@@ -6,7 +6,7 @@ variable "cidr" {
     type = string
 }
 
-variable "subnet_name" {
+variable "name" {
     type = string
 }
 
@@ -26,7 +26,7 @@ resource "aws_subnet" "subnet" {
     vpc_id = var.vpcid
     cidr_block = var.cidr
     tags = {
-        Name = var.subnet_name
+        Name = var.name
     }
 }
 
@@ -59,13 +59,13 @@ resource "aws_security_group" "WS" {
 resource "aws_network_interface" "nic" {
     subnet_id = aws_subnet.subnet.id
     private_ips = [ var.instance_ip ]
-    security_groups = [ aws_security_group.WS2.id ]
+    security_groups = [ aws_security_group.WS.id ]
     tags = {
         Name = var.instance_name
     }
 }
 
-resource "aws_instance" "webserver2" {
+resource "aws_instance" "webserver" {
     network_interface {
       network_interface_id = aws_network_interface.nic.id
       device_index = 0
@@ -75,23 +75,21 @@ resource "aws_instance" "webserver2" {
     instance_type = "t2.micro"
     key_name = "infstr-from-ntb"
 
-    user_data = file("${path.module}/../${startup_script_name}")
+    user_data = file("${path.module}/../${var.startup_script_name}")
 
     tags = {
       Name = var.instance_name
     }
 }
 
-
-
-resource "aws_eip" "webserver2_eip" {
-    instance = aws_instance.webserver2.id
+resource "aws_eip" "webserver_eip" {
+    instance = aws_instance.webserver.id
 }
 
-output "WebServer1-ID" {
-    value = aws_instance.webserver1.id
+output "WebServer-ID" {
+    value = aws_instance.webserver.id
 }
 
-output "WebServer1-ElasticIP" {
-    value = aws_eip.webserver1_eip.public_ip
+output "WebServer-ElasticIP" {
+    value = aws_eip.webserver_eip.public_ip
 }
