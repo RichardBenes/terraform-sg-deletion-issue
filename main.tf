@@ -26,6 +26,16 @@ module "blue_subnet" {
     startup_script_name = "webserver3-startup.sh"
 }
 
+module "yellow_subnet" {
+    source = "./subnet"
+    vpcid = module.vpccreator.vpcid
+    cidr = "10.0.6.0/24"
+    name = "Yellow Subnet"
+    instance_ip = "10.0.6.40"
+    instance_name = "WebServerInYellow"
+    startup_script_name = "webserver4-startup.sh"
+}
+
 output "WebServer1-ID" {
     value = module.red_subnet.WebServer1-ID
 }
@@ -45,4 +55,11 @@ output "WebServerInBlue-ID" {
 }
 output "WebServerInBlue-ElasticIP" {
     value = module.blue_subnet.WebServer-ElasticIP
+}
+
+output "WebServerInYellowe-ID" {
+    value = module.yellow_subnet.WebServer-ID
+}
+output "WebServerInYellow-ElasticIP" {
+    value = module.yellow_subnet.WebServer-ElasticIP
 }

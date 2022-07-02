@@ -1,6 +1,6 @@
 resource "aws_security_group" "WS" {
     vpc_id = var.vpcid
-    name = "WS"
+    name = var.instance_name
 
     ingress {
         from_port = 80
