@@ -1,5 +1,7 @@
 # Terraform - security group deletion issue
 
+*(btw. the key pair under keys/ is revoked)*
+
 ## What's up?
 
 When terraform configuration changes, one of the security group cannot be
